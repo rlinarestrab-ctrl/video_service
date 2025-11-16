@@ -1,0 +1,47 @@
+version: '3.9'
+services:
+  db:
+    image: postgres:15
+    container_name: video-db
+    environment:
+      POSTGRES_DB: video_service_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - ./db/init:/docker-entrypoint-initdb.d
+      - video_service_db_data:/var/lib/postgresql/data
+    ports:
+      - "5434:5432"  # <-- Puerto distinto a los otros servicios
+    networks:
+      - video_net
+
+  backend:
+    build:
+      context: ./backend
+    container_name: video-backend
+    command: /app/entrypoint.sh
+    environment:
+      POSTGRES_DB: video_service_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_HOST: db
+      POSTGRES_PORT: 5432
+      DJANGO_SECRET_KEY: dev-secret
+      DJANGO_DEBUG: "1"
+      CORS_ALLOWED_ORIGINS: http://localhost:5173
+      GOOGLE_CLIENT_ID: TU_CLIENT_ID_AQUI
+      GOOGLE_CLIENT_SECRET: TU_CLIENT_SECRET_AQUI
+      GOOGLE_REDIRECT_URI: http://localhost:8003/api/meet/oauth/callback/
+    ports:
+      - "8003:8000"
+    depends_on:
+      - db
+    networks:
+      - video_net
+
+volumes:
+  video_service_db_data:
+
+networks:
+  video_net:
+    driver: bridge

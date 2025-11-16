@@ -1,0 +1,14 @@
+Django==5.0.6
+djangorestframework==3.15.1
+psycopg2-binary
+django-cors-headers
+PyJWT==2.8.0
+gunicorn
+
+
+# Para el Paso 3 (Google):
+google-auth
+google-auth-oauthlib
+google-auth-httplib2
+google-api-python-client
+requests
