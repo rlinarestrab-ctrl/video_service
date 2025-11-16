@@ -4,6 +4,7 @@ psycopg2-binary
 django-cors-headers
 PyJWT==2.8.0
 gunicorn
+dj-database-url
 
 
 # Para el Paso 3 (Google):
